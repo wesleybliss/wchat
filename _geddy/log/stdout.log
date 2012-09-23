@@ -1,0 +1,39 @@
+[Sat, 22 Sep 2012 22:36:32 GMT] INFO Server starting with config: {
+  "environment": "development",
+  "workers": 1,
+  "port": 4000,
+  "debug": true,
+  "rotateWorkers": false,
+  "rotationWindow": 7200000,
+  "rotationTimeout": 300000,
+  "logDir": "/var/www/wchat.local/log",
+  "gracefulShutdownTimeout": 30000,
+  "heartbeatInterval": 5000,
+  "heartbeatWindow": 20000,
+  "staticFilePath": "/var/www/wchat.local/public",
+  "sessions": {
+    "store": "memory",
+    "key": "sid",
+    "expiry": 1209600
+  },
+  "cookieSessionKey": "sdata",
+  "metrics": null,
+  "i18n": {
+    "defaultLocale": "en-us",
+    "loadPaths": [
+      "/var/www/wchat.local/config/locales"
+    ]
+  },
+  "spdy": null,
+  "ssl": null,
+  "model": {
+    "useTimestamps": false,
+    "forceCamel": true
+  },
+  "hostname": null,
+  "detailedErrors": true
+}
+[Sat, 22 Sep 2012 22:36:32 GMT] INFO Creating 1 worker process.
+[Sat, 22 Sep 2012 22:36:32 GMT] INFO Server worker running in development on port 4000 with a PID of: 20114
+[Sat, 22 Sep 2012 22:36:32 GMT] DEBUG LOGGING STARTED ============================================
+[Sat, 22 Sep 2012 22:36:32 GMT] DEBUG ============================================================

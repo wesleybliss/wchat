@@ -1,0 +1,81 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+    <head>
+        <title>wchat</title>
+    </head>
+    <body>
+        
+        <h1>wchat</h1>
+        
+        <div id="buttons">
+            <button id="connectButton">Connect to server</button>
+            <button id="disconnectButton" disabled="disabled">Disconnect from server</button><br />
+            <textarea rows="4" cols="20" id="message"></textarea>
+	</div>
+	
+	<div id="messages"></div>
+        
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+            
+            //var socket = new io.Socket( 'http://wchat.local', {
+            //    port: 8080
+            //});
+            var socket = io.connect( 'http://wchat.local:8080' );
+            
+            // When a new mesasge arrives, create a dom node with the text inside, and place it
+            // in the top of the messages div. 
+            // The color switches between red and blue depending on the sentCounter parameter in the message.
+            socket.on('message', function(data){
+                $('div#messages').append(
+                    '<p>' + data.message + '</p>'
+                );
+            });
+            
+            // Disable connect button, when connected - enable disconnect button instead 
+            socket.on('connect', function() {
+                console.log( 'connected' );
+                document.getElementById('connectButton').disabled = true;
+                document.getElementById('disconnectButton').disabled = false;
+            });
+            
+            // Disable disconnect, when disconnect - enable connect button instead
+            socket.on('disconnect', function(){
+                document.getElementById('connectButton').disabled = false;
+                document.getElementById('disconnectButton').disabled = true;
+            });
+            
+            //A function to allow events to work on both IE and real browsers.
+            function setEvent(elmId, eventName, func) {
+                var elm = document.getElementById(elmId);
+                if(elm.addEventListener) {
+                    elm.addEventListener(eventName, func, false);
+                } else {
+                    elm.attachEvent('on'+eventName, func, false);
+                }
+            }
+            
+            // Setting Event Handlers for buttons, and the textbox. 
+            $('#connectButton').click( function() {
+                console.log( 'trying to connect' );
+                //socket.connect( 'http://wchat.local' );
+            });
+            
+            setEvent('disconnectButton', 'click', function() {
+                socket.disconnect();
+            });
+            
+            setEvent('message', 'keypress', function(evt) {
+                if(evt.keyCode == 13) {
+                    var message = document.getElementById('message').value; 
+                    document.getElementById('message').value = '';
+                    console.log( 'sending ' + message );
+                    socket.send(message);
+                }
+            });
+            
+        </script>
+      
+    </body>
+</html>
