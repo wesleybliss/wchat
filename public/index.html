@@ -28,6 +28,8 @@
             // in the top of the messages div. 
             // The color switches between red and blue depending on the sentCounter parameter in the message.
             socket.on('message', function(data){
+                // ignore timestamps for now
+                if ( data.message.indexOf('This was an auto message') >= 0 ) return;
                 $('div#messages').append(
                     '<p>' + data.message + '</p>'
                 );

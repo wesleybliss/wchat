@@ -33,7 +33,7 @@ app.get( '/sentCounter/get', function( req, res ) {
 
 // Action to broadcast messages to all connected users (except for the sender)
 app.get( '/message/broadcast/:msg', function( req, res ) {
-    socket.broadcast({
+    socket.emit( 'message', {
         sentCounter: sentCounter,
         message: req.params.msg
     });
@@ -64,7 +64,6 @@ socket.on( 'connection', function( client ) {
     
     client.on( 'message', function( data ) {
         sentCounter++;
-        console.log( '** Recieved from client: ' + data );
         client.broadcast.emit( 'message', {
             sentCounter: sentCounter,
             message: data
