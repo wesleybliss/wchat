@@ -8,7 +8,6 @@ var app = express(),
 
 server.listen( 8080 );
 
-//for ( var p in io ) console.log(p);
 
 app.configure( function() {
     
@@ -42,8 +41,8 @@ app.get( '/sentCounter/get', function( req, res ) {
 
 // Action to broadcast messages to all connected users (except for the sender)
 app.get( '/message/broadcast/:msg', function( req, res ) {
-    pr( socket );
-    io.sockets.broadcast( 'message', {
+    pr(io.sockets);
+    io.sockets.emit( 'message', {
         sentCounter: sentCounter,
         message: req.params.msg
     });
