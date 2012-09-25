@@ -1,9 +1,14 @@
 
 var express = require('express'),
-    app = express(),
-    io = require('socket.io'),
-    http = require('http'),
-    server = http.createServer( app );
+    http = require('http');
+
+var app = express(),
+    server = http.createServer( app ),
+    io = require('socket.io').listen( server );
+
+server.listen( 8080 );
+
+//for ( var p in io ) console.log(p);
 
 app.configure( function() {
     
@@ -16,6 +21,10 @@ app.configure( function() {
     app.use( express.logger() );
     
 });
+
+var pr = function( o ) {
+    for ( var p in o ) console.log( p );
+};
 
 
 // Action to set the counter
@@ -33,7 +42,8 @@ app.get( '/sentCounter/get', function( req, res ) {
 
 // Action to broadcast messages to all connected users (except for the sender)
 app.get( '/message/broadcast/:msg', function( req, res ) {
-    socket.emit( 'message', {
+    pr( socket );
+    io.sockets.broadcast( 'message', {
         sentCounter: sentCounter,
         message: req.params.msg
     });
@@ -41,16 +51,10 @@ app.get( '/message/broadcast/:msg', function( req, res ) {
 });
 
 
-// // // // // // // // 
-//app.listen( 8080 );
-server.listen( 8080 );
-// // // // // // // // 
 
+var sentCounter = 0;
 
-var sentCounter = 0,
-    socket = io.listen( server );
-
-socket.on( 'connection', function( client ) {
+io.sockets.on( 'connection', function( client ) {
     
     client.broadcast.emit( 'message', {
         sentCounter: sentCounter,
